@@ -1,7 +1,7 @@
-from selenium import webdriver
-from bs4 import BeautifulSoup
-import pandas as pd
 import matplotlib.pyplot as plt
+import pandas as pd
+from bs4 import BeautifulSoup
+from selenium import webdriver
 from wordcloud import WordCloud
 
 # CSS variables
@@ -44,7 +44,6 @@ for elem in elems:
 
 videoLinks = list(dict.fromkeys(videoLinks))
 
-
 for i in range(0, 50):
     driver.get(videoLinks[i])
     content = driver.page_source
@@ -58,15 +57,16 @@ data = {'Title': titles, 'Rating': ratings, 'Synopsis': synopsis}
 df = pd.DataFrame(data)
 df.to_csv('PrimVid.csv', index=False, encoding='utf-8')
 
+
 def wordcloud(df, filename):
     if len(df) > 1:
-        text = ' '. join(df.Synopsis)
+        text = ' '.join(df.Synopsis)
         wordcloud = WordCloud().generate(text)
 
         plt.imshow(wordcloud, interpolation='bilinear')
         plt.axis('off')
 
-        plt.savefig(filename+'.png')
+        plt.savefig(filename + '.png')
 
 
 dfBelow6 = df.loc[(df['Rating'] < 6)]
@@ -76,6 +76,5 @@ dfAbove8 = df.loc[(df['Rating'] >= 8)]
 wordcloud(dfBelow6, 'below6')
 wordcloud(df6To7, '6to7')
 wordcloud(dfAbove8, 'above8')
-
 
 driver.close()
